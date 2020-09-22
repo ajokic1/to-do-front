@@ -49,7 +49,7 @@ function Register() {
 
   return (
     <Container>
-      <Card className="mx-auto" style={{ maxWidth: "45rem" }}>
+      <Card className="mx-auto my-3" style={{ maxWidth: "45rem" }}>
         <Card.Body>
           <Form noValidate validated={isValidated} onSubmit={register}>
             <h1 className="mb-4 text-center">Create account</h1>

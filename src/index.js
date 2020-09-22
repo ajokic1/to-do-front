@@ -1,21 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
-import S from 'string';
-import * as serviceWorker from './serviceWorker';
-import axios from 'axios';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import App from "./App";
+import S from "string";
+import * as serviceWorker from "./serviceWorker";
+import axios from "axios";
 
 S.extendPrototype();
 
-axios.defaults.baseURL = 'http://localhost:8000/api';
+axios.defaults.baseURL = "http://localhost:8000/api";
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

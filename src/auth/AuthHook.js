@@ -9,6 +9,8 @@ function useAuth() {
     const response = await axios.post("/auth/login", { email, password });
     const userData = { ...response.data.user, ...response.data.token.original };
     setUser(userData);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + userData.access_token;
     localStorage.setItem("user", JSON.stringify(userData));
   }
 
