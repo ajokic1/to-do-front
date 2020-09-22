@@ -14,7 +14,7 @@ function FormInput({
   const [value, setter] = state;
 
   function handleChange(event) {
-    if(onChange) {
+    if (onChange) {
       onChange(event);
     } else {
       setter(event.target.value);

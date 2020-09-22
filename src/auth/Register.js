@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 import FormInput from "../partials/FormInput";
@@ -25,33 +25,33 @@ function Register() {
 
   async function register(event) {
     event.preventDefault();
+    setValidated(true);
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (!form.checkValidity()) {
       return;
     }
-    setValidated(true);
-    
+
     const request = {
-      first_name: firstName, 
-      last_name: lastName, 
-      email: email, 
-      password: password, 
-    }
-    const response = await axios.post('/users', request)
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password,
+    };
+    const response = await axios.post("/users", request);
     if (response.status === 201) {
       setCompleted(true);
     }
   }
 
-  if (isCompleted){
-    return <Redirect to='/login'/>
+  if (isCompleted) {
+    return <Redirect to="/auth/login" />;
   }
 
   return (
     <Container>
       <Card className="mx-auto" style={{ maxWidth: "45rem" }}>
         <Card.Body>
-          <Form noValidate validated={isValidated}>
+          <Form noValidate validated={isValidated} onSubmit={register}>
             <h1 className="mb-4 text-center">Create account</h1>
             <div className="text-center mb-4">
               Already have an account? <Link to="/login">Sign in.</Link>
@@ -71,6 +71,7 @@ function Register() {
             <FormInput
               formName="register"
               name="email"
+              type="email"
               state={[email, setEmail]}
               required
             />
@@ -94,7 +95,6 @@ function Register() {
               className="mt-5 mb-3 d-block mx-auto px-4"
               variant="primary"
               type="submit"
-              onClick={register}
             >
               Submit
             </Button>
