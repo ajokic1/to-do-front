@@ -3,14 +3,15 @@ import { Container, Form, Button, Card } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 import FormInput from "../partials/FormInput";
 import useAuth from "./AuthHook";
+import Errors from "../partials/Errors";
+import { ROUTES } from "../constants";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isCompleted, setCompleted] = useState(false);
+  const [status, setStatus] = useState({ done: false, errors: null });
   const [isValidated, setValidated] = useState(false);
-  const [error, setError] = useState(null);
 
   const auth = useAuth();
 
@@ -22,16 +23,12 @@ function Login() {
       return;
     }
 
-    try {
-      await auth.login(email, password);
-      setCompleted(true);
-    } catch (e) {
-      setError(e.response.data.error);
-    }
+    const status = await auth.login(email, password);
+    setStatus(status);
   }
 
-  if (isCompleted) {
-    return <Redirect to="/" />;
+  if (status.done && !status.errors) {
+    return <Redirect to={ROUTES.HOME} />;
   }
 
   return (
@@ -41,7 +38,7 @@ function Login() {
           <Form noValidate validated={isValidated} onSubmit={login}>
             <h1 className="mb-4 text-center">Sign in</h1>
             <div className="text-center mb-4">
-              Don't have an accout? <Link to="/register">Create account.</Link>
+              Don't have an accout? <Link to={ROUTES.AUTH.REGISTER}>Create account.</Link>
             </div>
             <FormInput
               formName="login"
@@ -57,9 +54,7 @@ function Login() {
               state={[password, setPassword]}
               required
             />
-            {error && (
-              <div className="text-center text-danger mb-4">{error}</div>
-            )}
+            <Errors errors={status.errors} />
             <div className="text-center mt-5 mb-3 ">
               <Link to="/auth/forgot" className="mr-3">
                 Forgot password?

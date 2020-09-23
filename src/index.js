@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
-import S from 'string';
+import boot from './services/bootstrap';
 import * as serviceWorker from './serviceWorker';
-import axios from 'axios';
 
-S.extendPrototype();
-
-axios.defaults.baseURL = 'http://localhost:8000/api';
+boot();
 
 ReactDOM.render(
   <React.StrictMode>

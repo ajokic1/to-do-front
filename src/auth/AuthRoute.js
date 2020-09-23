@@ -1,10 +1,10 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import { ROUTES } from "../constants";
+import AuthService from "../services/auth";
 
 function AuthRoute({ children, ...props }) {
-  const isAuthenticated = localStorage.getItem("user");
-
-  if (isAuthenticated) return <Redirect to="/" />;
+  if (AuthService.isAuthenticated()) return <Redirect to={ROUTES.HOME} />;
 
   return <Route {...props}>{children}</Route>;
 }

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 import FormInput from "../partials/FormInput";
-import axios from "axios";
+import AuthService from "../services/auth";
+import Errors from "../partials/Errors";
+import { ROUTES } from "../constants";
 
 function Register() {
   const [firstName, setFirstName] = useState("");
@@ -11,7 +13,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const [isCompleted, setCompleted] = useState(false);
+  const [status, setStatus] = useState({ done: false, errors: null });
   const [isValidated, setValidated] = useState(false);
 
   function handlePasswordConfirmationChange(event) {
@@ -31,20 +33,17 @@ function Register() {
       return;
     }
 
-    const request = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-    };
-    const response = await axios.post("/users", request);
-    if (response.status === 201) {
-      setCompleted(true);
-    }
+    const status = await AuthService.register({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    setStatus(status);
   }
 
-  if (isCompleted) {
-    return <Redirect to="/auth/login" />;
+  if (status.done && !status.errors) {
+    return <Redirect to={ROUTES.AUTH.LOGIN} />;
   }
 
   return (
@@ -54,7 +53,7 @@ function Register() {
           <Form noValidate validated={isValidated} onSubmit={register}>
             <h1 className="mb-4 text-center">Create account</h1>
             <div className="text-center mb-4">
-              Already have an account? <Link to="/login">Sign in.</Link>
+              Already have an account? <Link to={ROUTES.AUTH.LOGIN}>Sign in.</Link>
             </div>
             <FormInput
               formName="register"
@@ -91,6 +90,7 @@ function Register() {
               invalidMessage="Passwords do not match."
               required
             />
+            <Errors errors={status.errors} />
             <Button
               className="mt-5 mb-3 d-block mx-auto px-4"
               variant="primary"

@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import FormInput from "../partials/FormInput";
-import axios from "axios";
+import AuthService from "../services/auth";
+import Errors from "../partials/Errors";
+import { ROUTES } from "../constants";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
 
-  const [isCompleted, setCompleted] = useState(false);
+  const [status, setStatus] = useState({ done: false, errors: null });
   const [isValidated, setValidated] = useState(false);
-  const [error, setError] = useState(null);
 
   async function forgot(event) {
     event.preventDefault();
@@ -19,16 +20,12 @@ function ForgotPassword() {
       return;
     }
 
-    try {
-      await axios.post("/auth/forgot", { email });
-      setCompleted(true);
-    } catch (e) {
-      setError(e.response.data.message);
-    }
+    const status = await AuthService.forgotPassword(email);
+    setStatus(status);
   }
 
-  if (isCompleted) {
-    return <Redirect to="/" />;
+  if (status.done && !status.errors) {
+    return <Redirect to={ROUTES.HOME} />;
   }
 
   return (
@@ -48,9 +45,7 @@ function ForgotPassword() {
               state={[email, setEmail]}
               required
             />
-            {error && (
-              <div className="text-center text-danger mb-4">{error}</div>
-            )}
+            <Errors errors={status.errors} />
             <div className="text-center mt-5 mb-3 ">
               <Button className="px-4" variant="primary" type="submit">
                 Submit

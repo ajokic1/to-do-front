@@ -6,12 +6,17 @@ import Navbar from "./partials/Navbar";
 import Auth from "./auth/Auth";
 import AuthRoute from "./auth/AuthRoute";
 import ResetPassword from "./auth/ResetPassword";
+import AuthService from "./services/auth";
+import { ROUTES } from "./constants";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    (async () => {
+      const user = await AuthService.getUser();
+      setUser(user);
+    })();
   }, []);
 
   return (
@@ -19,13 +24,13 @@ function App() {
       <Router>
         <Navbar />
         <Switch>
-          <Route exact path="/">
+          <Route exact path={ROUTES.HOME}>
             Home
           </Route>
-          <Route path="/auth">
+          <Route path={ROUTES.AUTH.BASE}>
             <Auth />
           </Route>
-          <AuthRoute path="/password/reset/:token">
+          <AuthRoute path={ROUTES.AUTH.RESET}>
             <ResetPassword />
           </AuthRoute>
         </Switch>
