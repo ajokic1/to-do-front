@@ -10,7 +10,8 @@ export const API = {
     FORGOT_PASSWORD: '/auth/forgot',
     RESET_PASSWORD: '/auth/reset',
     ME: '/auth/me',
-  }
+  },
+  TODOS: '/todos'
 }
 
 export const ROUTES = {

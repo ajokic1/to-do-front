@@ -4,6 +4,8 @@ import Checkbox from "../partials/Checkbox";
 import "../styles/TodoItem.css";
 import Loader from "react-loader-spinner";
 import todoActions from "./TodoActions";
+import TodoService from "../services/todo";
+import Errors from "../partials/Errors";
 
 const priorities = {
   0: "low",
@@ -13,13 +15,13 @@ const priorities = {
 
 function TodoItem({ todo, dispatch }) {
   const [confirm, setConfirm] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   async function handleCheck(event) {
     dispatch(todoActions.setLoading(todo));
-    let newTodo = { ...todo };
-    newTodo.is_completed = event.target.checked;
-    const response = await request.patch(`/todos/${todo.id}`, newTodo);
-    dispatch(todoActions.update(response.data.data));
+    const { updatedTodo, errors } = await TodoService.update({ ...todo, is_completed: event.target.checked });
+    setErrors(errors);
+    dispatch(todoActions.update(updatedTodo));
   }
 
   async function handleDelete(event) {
@@ -60,14 +62,12 @@ function TodoItem({ todo, dispatch }) {
           <div className="align-self-center">
             <span className="mr-4 action-button">
               <i className="fas fa-edit mr-2 h5"></i>
-              Edit
             </span>
             <span
               className="mr-4 action-button"
               onClick={() => setConfirm((state) => !state)}
             >
               <i className="fas fa-trash-alt mr-2 h5"></i>
-              Delete
             </span>
             {confirm && (
               <span className="confirm">
@@ -79,6 +79,7 @@ function TodoItem({ todo, dispatch }) {
         <div>
           <small>{todo.description}</small>
         </div>
+        <Errors errors={errors} />
       </div>
     </div>
   );
