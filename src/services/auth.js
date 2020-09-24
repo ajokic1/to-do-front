@@ -4,12 +4,7 @@ import { API } from "../constants";
 class AuthService {
   async register(userData) {
     try {
-      await request.post(API.AUTH.REGISTER, {
-        first_name: userData.firstName,
-        last_name: userData.lastName,
-        email: userData.email,
-        password: userData.password,
-      });
+      await request.post(API.AUTH.REGISTER, userData);
       return { done: true, error: null };
     } catch (e) {
       return this.statusWithErrors(e);
