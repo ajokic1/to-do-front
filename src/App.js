@@ -9,6 +9,9 @@ function App() {
 
   useEffect(() => {
     (async () => {
+      if (!AuthService.isAuthenticated()) {
+        return;
+      }
       const user = await AuthService.getUser();
       setUser(user);
     })();

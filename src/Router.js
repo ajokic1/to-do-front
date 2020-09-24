@@ -16,7 +16,7 @@ function Router() {
           <div style={{ height: "3rem" }}></div>
           <Switch>
             <Route exact path={ROUTES.HOME}>
-              {AuthService.isAuthenticated ? (
+              {AuthService.isAuthenticated() ? (
                 <Todos />
               ) : (
                 <h3 className="text-center text-light">

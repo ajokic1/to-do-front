@@ -1,7 +1,6 @@
 import request from "./request";
 import { API } from "../constants";
 import AuthService from "./auth";
-import Axios from "axios";
 
 class TodoService {
   async loadList() {

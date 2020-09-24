@@ -79,7 +79,7 @@ function TodoItem({ todo, dispatch }) {
         <div>
           <small>{todo.description}</small>
         </div>
-        <Errors errors={errors} />
+        <Errors errors={errors}/>
       </div>
     </div>
   );
