@@ -1,29 +1,20 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+import Errors from "./Errors";
 
 function FormInput({
   formName,
   name,
   type = "text",
   className = "",
-  state,
-  invalidMessage,
+  value,
+  errors,
   onChange,
   ...rest
 }) {
-  const [value, setter] = state;
-
-  function handleChange(event) {
-    if (onChange) {
-      onChange(event);
-    } else {
-      setter(event.target.value);
-    }
-  }
-
   return (
     <Form.Group
-      className={"mb-4 " + className}
+      className={"mb-4 " + (errors.size > 0 && "error ") + className}
       controlId={formName.camelize() + name.camelize()}
     >
       <Form.Label>{name.humanize().capitalize()}</Form.Label>
@@ -32,14 +23,13 @@ function FormInput({
         placeholder={`Enter ${name.humanize().toLowerCase()}`}
         name={name}
         value={value}
-        onChange={handleChange}
+        isInvalid={errors.length}
+        onChange={onChange}
         {...rest}
       />
-      <Form.Control.Feedback type="invalid" className="position-relative">
-        {invalidMessage
-          ? invalidMessage
-          : `Please enter a valid ${name.humanize().toLowerCase()}.`}
-      </Form.Control.Feedback>
+      <small>
+        <Errors errors={errors} />
+      </small>
     </Form.Group>
   );
 }

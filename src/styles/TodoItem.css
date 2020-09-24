@@ -18,3 +18,33 @@
 .priority-high {
   color: red;
 }
+
+.action-button {
+  cursor: pointer;
+}
+
+.action-button:hover {
+  color: gray;
+}
+
+.confirm {
+  width: 0px;
+  height: 0px;
+  position: relative;
+}
+
+.confirm span {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  box-shadow: 6px 6px 14px 0px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.confirm span:hover {
+  background-color: gray;
+}
+

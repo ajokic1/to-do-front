@@ -5,21 +5,19 @@ import UserContext from "./auth/UserContext";
 import Navbar from "./partials/Navbar";
 import Auth from "./auth/Auth";
 import AuthRoute from "./auth/AuthRoute";
-import ProtectedRoute from "./auth/ProtectedRoute";
 import ResetPassword from "./auth/ResetPassword";
-import axios from "axios";
+import AuthService from "./services/auth";
+import { ROUTES } from "./constants";
 import Todos from "./todos/Todos";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setUser(userData);
-    if (userData) {
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + userData.access_token;
-    }
+    (async () => {
+      const user = await AuthService.getUser();
+      setUser(user);
+    })();
   }, []);
 
   return (
@@ -29,7 +27,7 @@ function App() {
           <Navbar />
           <div style={{ height: "3rem" }}></div>
           <Switch>
-            <Route exact path="/">
+            <Route exact path={ROUTES.HOME}>
               {user ? (
                 <Todos />
               ) : (
@@ -38,10 +36,10 @@ function App() {
                 </h3>
               )}
             </Route>
-            <Route path="/auth">
+            <Route path={ROUTES.AUTH.BASE}>
               <Auth />
             </Route>
-            <AuthRoute path="/password/reset/:token">
+            <AuthRoute path={ROUTES.AUTH.RESET}>
               <ResetPassword />
             </AuthRoute>
           </Switch>

@@ -1,104 +1,55 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Card } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
-import FormInput from "../partials/FormInput";
-import axios from "axios";
+import AuthService from "../services/auth";
+import { ROUTES } from "../constants";
+import useFormFields from "../partials/FormFieldsHook";
+import Form from "../partials/Form";
 
 function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const formFields = useFormFields({
+    first_name: { required: true },
+    last_name: { required: true },
+    email: { required: true },
+    password: { required: true, type: "password" },
+    password_confirmation: {
+      required: true,
+      equals: "password",
+      type: "password",
+    },
+  });
 
-  const [isCompleted, setCompleted] = useState(false);
-  const [isValidated, setValidated] = useState(false);
-
-  function handlePasswordConfirmationChange(event) {
-    setPasswordConfirmation(event.target.value);
-    if (event.target.value !== password) {
-      event.target.setCustomValidity("Passwords do not match.");
-    } else {
-      event.target.setCustomValidity("");
-    }
-  }
+  const [status, setStatus] = useState({ done: false, errors: null });
 
   async function register(event) {
     event.preventDefault();
-    setValidated(true);
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
+    if (!formFields.validateFields()) {
       return;
     }
-
-    const request = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-    };
-    const response = await axios.post("/users", request);
-    if (response.status === 201) {
-      setCompleted(true);
-    }
+    const status = await AuthService.register(formFields.data);
+    setStatus(status);
   }
 
-  if (isCompleted) {
-    return <Redirect to="/auth/login" />;
+  if (status.done && !status.errors) {
+    return <Redirect to={ROUTES.AUTH.LOGIN} />;
   }
 
   return (
     <Container>
       <Card className="mx-auto my-3" style={{ maxWidth: "45rem" }}>
         <Card.Body>
-          <Form noValidate validated={isValidated} onSubmit={register}>
-            <h1 className="mb-4 text-center">Create account</h1>
-            <div className="text-center mb-4">
-              Already have an account? <Link to="/login">Sign in.</Link>
-            </div>
-            <FormInput
-              formName="register"
-              name="first_name"
-              state={[firstName, setFirstName]}
-              required
-            />
-            <FormInput
-              formName="register"
-              name="last_name"
-              state={[lastName, setLastName]}
-              required
-            />
-            <FormInput
-              formName="register"
-              name="email"
-              type="email"
-              state={[email, setEmail]}
-              required
-            />
-            <FormInput
-              formName="register"
-              name="password"
-              type="password"
-              state={[password, setPassword]}
-              required
-            />
-            <FormInput
-              formName="register"
-              name="password_confirmation"
-              type="password"
-              state={[passwordConfirmation, setPasswordConfirmation]}
-              onChange={handlePasswordConfirmationChange}
-              invalidMessage="Passwords do not match."
-              required
-            />
-            <Button
-              className="mt-5 mb-3 d-block mx-auto px-4"
-              variant="primary"
-              type="submit"
-            >
-              Submit
-            </Button>
-          </Form>
+          <h1 className="mb-4 text-center">Create account</h1>
+          <div className="text-center mb-4">
+            Already have an account?{" "}
+            <Link to={ROUTES.AUTH.LOGIN}>Sign in.</Link>
+          </div>
+          <Form
+            formFields={formFields.fields}
+            changeHandlers={formFields.changeHandlers}
+            errors={status.errors}
+            formName="register"
+            onSubmit={register}
+          />
         </Card.Body>
       </Card>
     </Container>
