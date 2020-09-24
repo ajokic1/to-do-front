@@ -8,10 +8,26 @@ function FormInput({
   type = "text",
   className = "",
   value,
+  values,
   errors,
   onChange,
+  rows,
   ...rest
 }) {
+  const options = values
+    ? values.map((value) => (
+        <option key={value.value} value={value.value}>{value.caption}</option>
+      ))
+    : null;
+
+  let as = "input";
+  if (values) {
+    as = "select";
+  }
+  if (rows > 1) {
+    as = "textarea";
+  }
+
   return (
     <Form.Group
       className={"mb-4 " + (errors.size > 0 && "error ") + className}
@@ -19,6 +35,8 @@ function FormInput({
     >
       <Form.Label>{name.humanize().capitalize()}</Form.Label>
       <Form.Control
+        as={as}
+        rows={rows}
         type={type}
         placeholder={`Enter ${name.humanize().toLowerCase()}`}
         name={name}
@@ -26,7 +44,9 @@ function FormInput({
         isInvalid={errors.length}
         onChange={onChange}
         {...rest}
-      />
+      >
+        {options}
+      </Form.Control>
       <small>
         <Errors errors={errors} />
       </small>

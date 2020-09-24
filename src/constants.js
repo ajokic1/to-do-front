@@ -10,6 +10,10 @@ export const API = {
     FORGOT_PASSWORD: '/auth/forgot',
     RESET_PASSWORD: '/auth/reset',
     ME: '/auth/me',
+  },
+  TODOS: {
+    INDEX: '/todos',
+    SINGLE_TODO: '/todos/:id', 
   }
 }
 
@@ -22,5 +26,9 @@ export const ROUTES = {
     FORGOT: "/auth/forgot",
     LOGOUT: "/auth/logout",
     RESET: "/password/reset/:token",
+  },
+  TODOS: {
+    EDIT: "/edit",
+    CREATE: "/create"
   }
 }

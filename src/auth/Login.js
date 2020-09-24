@@ -32,7 +32,7 @@ function Login() {
 
   return (
     <Container>
-      <Card className="mx-auto" style={{ maxWidth: "45rem" }}>
+      <Card className="mx-auto my-3" style={{ maxWidth: "45rem" }}>
         <Card.Body>
           <h1 className="mb-4 text-center">Sign in</h1>
           <div className="text-center mb-2">

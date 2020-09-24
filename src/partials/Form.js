@@ -23,6 +23,8 @@ function Form({
         onChange={changeHandlers[formFieldName]}
         required={formField.required}
         type={formField.type}
+        values={formField.values}
+        rows={formField.rows}
       />
     );
   });

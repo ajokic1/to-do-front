@@ -1,0 +1,62 @@
+.item {
+  padding: 2rem 2rem;
+  background-color: white;
+  box-shadow: 6px 6px 14px 0px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.priority-low {
+  color: green;
+}
+
+.priority-medium {
+  color: orange;
+}
+
+.priority-high {
+  color: red;
+}
+
+.action-button {
+  cursor: pointer;
+}
+
+.action-button:hover {
+  color: gray;
+}
+
+.add-todo {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.add-todo:hover {
+  opacity: 1;
+  background-color: lightgray !important;
+}
+
+.confirm {
+  width: 0px;
+  height: 0px;
+  position: relative;
+}
+
+.confirm span {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  box-shadow: 6px 6px 14px 0px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.5rem 1.5rem;
+  transition: 0.3s;
+}
+
+.confirm span:hover {
+  background-color: gray;
+}
+
