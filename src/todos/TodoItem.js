@@ -1,8 +1,9 @@
 import Axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import Checkbox from "../partials/Checkbox";
 import "../styles/TodoItem.css";
 import Loader from "react-loader-spinner";
+import todoActions from "./TodoActions";
 
 const priorities = {
   0: "low",
@@ -11,22 +12,23 @@ const priorities = {
 };
 
 function TodoItem({ todo, dispatch }) {
+  const [confirm, setConfirm] = useState(false);
+
   async function handleCheck(event) {
-    dispatch({
-      type: "setLoading",
-      payload: { id: todo.id },
-    });
+    dispatch(todoActions.setLoading(todo));
     let newTodo = { ...todo };
     newTodo.is_completed = event.target.checked;
     const response = await Axios.patch(`/todos/${todo.id}`, newTodo);
-    dispatch({
-      type: "update",
-      payload: response.data.data,
-    });
+    dispatch(todoActions.update(response.data.data));
+  }
+
+  async function handleDelete(event) {
+    await Axios.delete(`/todos/${todo.id}`);
+    dispatch(todoActions.remove(todo));
   }
 
   return (
-    <div className="item d-flex flex-row">
+    <div className="item d-flex flex-row w-100">
       <div className="mt-2 ml-2 mr-4" style={{ flex: "0 0 3rem" }}>
         {todo.isLoading ? (
           <Loader
@@ -40,17 +42,39 @@ function TodoItem({ todo, dispatch }) {
           <Checkbox checked={todo.is_completed} onChange={handleCheck} />
         )}
       </div>
-      <div>
-        <div>
-          <small>
-            Priority:&nbsp;
-            <span className={"priority-" + priorities[todo.priority]}>
-              {priorities[todo.priority]}
+      <div className="w-100">
+        <div className="d-flex flex-row w-100">
+          <div className="mr-auto">
+            <div>
+              <small>
+                Priority:&nbsp;
+                <span className={"priority-" + priorities[todo.priority]}>
+                  {priorities[todo.priority]}
+                </span>
+              </small>
+            </div>
+            <div>
+              <strong>{todo.title}</strong>
+            </div>
+          </div>
+          <div className="align-self-center">
+            <span className="mr-4 action-button">
+              <i className="fas fa-edit mr-2 h5"></i>
+              Edit
             </span>
-          </small>
-        </div>
-        <div>
-          <strong>{todo.title}</strong>
+            <span
+              className="mr-4 action-button"
+              onClick={() => setConfirm((state) => !state)}
+            >
+              <i className="fas fa-trash-alt mr-2 h5"></i>
+              Delete
+            </span>
+            {confirm && (
+                <span className="confirm">
+                  <span onClick={handleDelete}>Confirm</span>
+                </span>
+              )}
+          </div>
         </div>
         <div>
           <small>{todo.description}</small>
