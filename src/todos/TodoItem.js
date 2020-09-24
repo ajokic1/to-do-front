@@ -6,6 +6,8 @@ import Loader from "react-loader-spinner";
 import todoActions from "./TodoActions";
 import TodoService from "../services/todo";
 import Errors from "../partials/Errors";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../constants";
 
 const priorities = {
   0: "low",
@@ -19,7 +21,10 @@ function TodoItem({ todo, dispatch }) {
 
   async function handleCheck(event) {
     dispatch(todoActions.setLoading(todo));
-    const { updatedTodo, errors } = await TodoService.update({ ...todo, is_completed: event.target.checked });
+    const { updatedTodo, errors } = await TodoService.update({
+      ...todo,
+      is_completed: event.target.checked,
+    });
     setErrors(errors);
     dispatch(todoActions.update(updatedTodo));
   }
@@ -60,9 +65,12 @@ function TodoItem({ todo, dispatch }) {
             </div>
           </div>
           <div className="align-self-center">
-            <span className="mr-4 action-button">
-              <i className="fas fa-edit mr-2 h5"></i>
-            </span>
+            <Link className="text-dark" to={`${ROUTES.TODOS.EDIT}/${todo.id}`}>
+              <span className="mr-4 action-button">
+                <i className="fas fa-edit mr-2 h5"></i>
+              </span>
+            </Link>
+
             <span
               className="mr-4 action-button"
               onClick={() => setConfirm((state) => !state)}
@@ -79,7 +87,7 @@ function TodoItem({ todo, dispatch }) {
         <div>
           <small>{todo.description}</small>
         </div>
-        <Errors errors={errors}/>
+        <Errors errors={errors} />
       </div>
     </div>
   );

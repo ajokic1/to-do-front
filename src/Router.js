@@ -3,10 +3,12 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from "./partials/Navbar";
 import Auth from "./auth/Auth";
 import AuthRoute from "./auth/AuthRoute";
+import ProtectedRoute from "./auth/ProtectedRoute";
 import ResetPassword from "./auth/ResetPassword";
 import AuthService from "./services/auth";
 import { ROUTES } from "./constants";
 import Todos from "./todos/Todos";
+import TodoForm from './todos/TodoForm';
 
 function Router() {
   return (
@@ -30,6 +32,9 @@ function Router() {
             <AuthRoute path={ROUTES.AUTH.RESET}>
               <ResetPassword />
             </AuthRoute>
+            <ProtectedRoute path={`${ROUTES.TODOS.EDIT}/:id`}>
+              <TodoForm />
+            </ProtectedRoute>
           </Switch>
         </BrowserRouter>
     </div>

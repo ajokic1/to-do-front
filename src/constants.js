@@ -23,5 +23,9 @@ export const ROUTES = {
     FORGOT: "/auth/forgot",
     LOGOUT: "/auth/logout",
     RESET: "/password/reset/:token",
+  },
+  TODOS: {
+    EDIT: "/edit",
+    CREATE: "/create"
   }
 }

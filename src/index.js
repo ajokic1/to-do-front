@@ -5,13 +5,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import App from "./App";
-import S from "string";
 import * as serviceWorker from "./serviceWorker";
-import axios from "axios";
+import boot from "./services/bootstrap";
 
-S.extendPrototype();
-
-axios.defaults.baseURL = "http://localhost:8000/api";
+boot();
 
 ReactDOM.render(
   <React.StrictMode>

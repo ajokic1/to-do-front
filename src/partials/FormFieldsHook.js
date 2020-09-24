@@ -6,6 +6,8 @@ const defaultField = {
   equals: null,
   errors: [],
   type: "text",
+  values: null,
+  rows: 1,
 };
 
 function useFormFields(config) {
@@ -67,11 +69,18 @@ function useFormFields(config) {
     return values;
   }
 
+  function setFieldValues(values) {
+    for (const fieldName in values) {
+      updateFormField(fieldName, {value: values[fieldName]});
+    }
+  }
+
   return {
     fields: formFields,
     changeHandlers,
     data: getFieldValues(),
     validateFields,
+    setFieldValues
   };
 }
 

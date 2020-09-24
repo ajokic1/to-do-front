@@ -11,7 +11,7 @@ function Checkbox({ checked, onChange }) {
         id="custom-checkbox"
         className="custom-checkbox"
       />
-      <span className="custom-checkbox-span" tabindex="0"></span>
+      <span className="custom-checkbox-span" tabIndex="0"></span>
     </span>
   );
 }
