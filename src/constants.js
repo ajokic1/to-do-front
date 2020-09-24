@@ -11,7 +11,10 @@ export const API = {
     RESET_PASSWORD: '/auth/reset',
     ME: '/auth/me',
   },
-  TODOS: '/todos'
+  TODOS: {
+    INDEX: '/todos',
+    SINGLE_TODO: '/todos/:id', 
+  }
 }
 
 export const ROUTES = {

@@ -27,6 +27,17 @@
   color: gray;
 }
 
+.add-todo {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.add-todo:hover {
+  opacity: 1;
+  background-color: lightgray !important;
+}
+
 .confirm {
   width: 0px;
   height: 0px;
@@ -42,6 +53,7 @@
   top: 2rem;
   right: 2rem;
   padding: 0.5rem 1.5rem;
+  transition: 0.3s;
 }
 
 .confirm span:hover {

@@ -11,6 +11,7 @@ function TodoForm() {
     title: { required: true },
     description: { rows: 6 },
     priority: {
+      value: 0,
       values: [
         { value: 0, caption: "Low" },
         { value: 1, caption: "Medium" },
@@ -24,6 +25,9 @@ function TodoForm() {
 
   useEffect(() => {
     (async () => {
+      if(!match.params.id) {
+        return;
+      }
       const { todo } = await TodoService.get(match.params.id);
       formFields.setFieldValues({
         title: todo.title,
@@ -38,12 +42,17 @@ function TodoForm() {
     if (!formFields.validateFields()) {
       return;
     }
-    const action = match.params.id ? TodoService.update : TodoService.create;
-    const status = await action({ ...formFields.data, id: match.params.id });
-    setStatus(status);
+    if(match.params.id) {
+      const status = await TodoService.update({ ...formFields.data, id: match.params.id });
+      setStatus(status);
+    } else {
+      const status = await TodoService.create({ ...formFields.data });
+      console.log(status);
+      setStatus(status);
+    }
   }
 
-  if (status.done && status.errors.length === 0) {
+  if (status.done) {
     return <Redirect to={ROUTES.HOME} />;
   }
 

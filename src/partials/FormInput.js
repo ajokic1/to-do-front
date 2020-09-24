@@ -16,15 +16,15 @@ function FormInput({
 }) {
   const options = values
     ? values.map((value) => (
-        <option value={value.value}>{value.caption}</option>
+        <option key={value.value} value={value.value}>{value.caption}</option>
       ))
     : null;
 
   let as = "input";
-  if(values) {
+  if (values) {
     as = "select";
   }
-  if(rows>1) {
+  if (rows > 1) {
     as = "textarea";
   }
 

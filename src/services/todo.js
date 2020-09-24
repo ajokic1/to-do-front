@@ -2,53 +2,50 @@ import request from "./request";
 import { API } from "../constants";
 import AuthService from "./auth";
 
-class TodoService {
-  async action(asyncCallback) {
+function TodoService() {
+  async function catchErrors (asyncCallback, ...params) {
     if (!AuthService.isAuthenticated) {
-      return { response: null, errors: ["Not signed in."] };
+      return { errors: ["Not signed in."] };
     }
-    try {
-      const response = await asyncCallback();
-      return { response, errors: null };
+    try{
+      const response = await asyncCallback(...params);
+      return { ...response, done: true, errors: [] }
     } catch (e) {
-      return { response: null, errors: [e.message] };
+      return { errors: [e.message] }
     }
   }
 
-  async loadList() {
-    const { response, errors } = await this.action(async () => (
-      await request.get(API.TODOS)
-    ));
-    return { todoList: response && response.data, errors }
+  async function loadList() {
+    const response = await request.get(API.TODOS.INDEX)
+    return { todoList: response ? response.data : [] }
   }
 
-  async update(todo) {
-    const { response, errors } = await this.action(async () => (
-      await request.patch(`${API.TODOS}/${todo.id}`, todo)
-    ));
-    return { updatedTodo: response && response.data.data, errors }
+  async function update(todo) {
+    const response = await request.put(API.TODOS.SINGLE_TODO.replace(':id', todo.id), todo);
+    return { updatedTodo: response && response.data.data }
   }
   
-  async create(todo) {
-    const { response, errors } = await this.action(async () => (
-      await request.post(`${API.TODOS}`, todo)
-    ));
-    return { newTodo: response && response.data.data, errors }
+  async function create(todo) {
+    const response = await request.post(API.TODOS.INDEX, todo);
+    return { newTodo: response && response.data.data }
   }
 
-  async get(id) {
-    const { response, errors } = await this.action(async () => (
-      await request.get(`${API.TODOS}/${id}`)
-    ));
-    return { todo: response && response.data, errors }
+  async function get(id) {
+    const response = await request.get(API.TODOS.SINGLE_TODO.replace(':id', id));
+    return { todo: response && response.data }
   }
 
-  async delete(todo) {
-    const { errors } = await this.action(async () => (
-      request.delete(`${API.TODOS}/${todo.id}`)
-    ));
-    return { errors }
-  } 
+  async function remove(todo) {
+    await request.delete(API.TODOS.SINGLE_TODO.replace(':id', todo.id));
+  }
+  
+  return {
+    loadList: (...params) => catchErrors(loadList, ...params), 
+    update: (...params) => catchErrors(update, ...params), 
+    create: (...params) => catchErrors(create, ...params), 
+    get: (...params) => catchErrors(get, ...params), 
+    delete: (...params) => catchErrors(remove, ...params), 
+  }
 }
 
-export default new TodoService();
+export default TodoService();

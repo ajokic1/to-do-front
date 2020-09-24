@@ -1,5 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import CreateTodoButton from "./CreateTodoButton";
 import TodoItem from "./TodoItem";
 
 function TodoList({ todos, dispatch }) {
@@ -7,7 +8,12 @@ function TodoList({ todos, dispatch }) {
     .sort((first, second) => first.priority < second.priority)
     .map((todo) => <TodoItem key={todo.id} todo={todo} dispatch={dispatch} />);
 
-  return <Container>{todoCards}</Container>;
+  return (
+    <Container>
+      <CreateTodoButton />
+      {todoCards}
+    </Container>
+  );
 }
 
 export default TodoList;

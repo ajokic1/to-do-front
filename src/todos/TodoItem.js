@@ -29,8 +29,8 @@ function TodoItem({ todo, dispatch }) {
     dispatch(todoActions.update(updatedTodo));
   }
 
-  async function handleDelete(event) {
-    await request.delete(`/todos/${todo.id}`);
+  async function handleDelete() {
+    await TodoService.delete(todo);
     dispatch(todoActions.remove(todo));
   }
 
@@ -87,7 +87,7 @@ function TodoItem({ todo, dispatch }) {
         <div>
           <small>{todo.description}</small>
         </div>
-        <Errors errors={errors} />
+        <Errors errors={errors ? errors : []} />
       </div>
     </div>
   );

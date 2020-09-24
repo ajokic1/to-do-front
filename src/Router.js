@@ -35,6 +35,9 @@ function Router() {
             <ProtectedRoute path={`${ROUTES.TODOS.EDIT}/:id`}>
               <TodoForm />
             </ProtectedRoute>
+            <ProtectedRoute path={`${ROUTES.TODOS.CREATE}`}>
+              <TodoForm />
+            </ProtectedRoute>
           </Switch>
         </BrowserRouter>
     </div>
