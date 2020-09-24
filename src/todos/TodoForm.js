@@ -42,14 +42,9 @@ function TodoForm() {
     if (!formFields.validateFields()) {
       return;
     }
-    if(match.params.id) {
-      const status = await TodoService.update({ ...formFields.data, id: match.params.id });
-      setStatus(status);
-    } else {
-      const status = await TodoService.create({ ...formFields.data });
-      console.log(status);
-      setStatus(status);
-    }
+    const status = await match.params.id 
+      ? TodoService.update({ ...formFields.data, id: match.params.id })
+      : TodoService.create({ ...formFields.data });
   }
 
   if (status.done) {

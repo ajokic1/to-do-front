@@ -15,7 +15,7 @@ function Todos() {
     (async () => {
       const { todoList, errors } = await TodoService.loadList();
       setErrors(errors);
-      dispatch(todoActions.addList(todoList));
+      dispatch(todoActions.addList(todoList ? todoList : []));
     })();
   }, [user]);
 
